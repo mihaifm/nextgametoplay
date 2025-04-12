@@ -36,7 +36,6 @@ Example:
 
 ## Notes
 
-You can save a file containing a list of your games, sorted by the difficulty of the rarest achievement. Just uncomment this line in the script:
+You can save a file containing a list of your games, sorted by the difficulty of the rarest achievement. Just add another parameter to the command
 
-    // Uncomment to save the sorted results to a file
-    // fs.writeFileSync('toplay.txt', output, 'utf8');
+    node nextgametoplay.js list_of_games.html output.txt

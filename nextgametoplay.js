@@ -92,24 +92,29 @@ async function main() {
 
         const data = fs.readFileSync(htmlPath, 'utf8');
 
-        const regex = /appid&quot;:(\d+)/g;
+        const regex = /appid&quot;:(\d+),&quot;unlocked&quot;:(\d+),&quot;total&quot;:(\d+),&quot;percentage&quot;:&quot;(\d+)/g;
 
-        const ids = new Set();
+        const ids = []
         let match;
 
         while ((match = regex.exec(data)) !== null) {
-            ids.add(match[1]);
+            ids.push({ id: match[1], completed: +match[4] });
         }
 
         const gameData = []
 
-        for (let id of ids) {
-            const { gameName, percentages } = await fetchAchievements(id);
+        for (let idobj of ids) {
+            const { gameName, percentages } = await fetchAchievements(idobj.id);
 
             if (percentages.length > 0) {
                 const lowestPercentage = Math.min(...percentages);
                 console.log(`${gameName}: ${lowestPercentage}%`);
-                gameData.push({ id, gameName, lowestPercentage });
+                gameData.push({
+                    id: idobj.id,
+                    completed: idobj.completed,
+                    gameName,
+                    lowestPercentage
+                });
             }
 
             await delay(500);
@@ -123,10 +128,16 @@ async function main() {
         const lines = gameData.map(obj => `${obj.id} ${obj.gameName} ${obj.lowestPercentage}`);
         const output = lines.join('\n');
 
-        // Uncomment to save the sorted results to a file
-        // fs.writeFileSync('toplay.txt', output, 'utf8');
+        if (process.argv[3]) {
+            fs.writeFileSync(process.argv[3], output, 'utf8');
+        }
 
-        console.log(`\nNext game to play: ${gameData[0].gameName} ${gameData[0].lowestPercentage}%`);
+        for (gameEntry of gameData) {
+            if (gameEntry.completed != 100) {
+                console.log(`\nNext game to play: ${gameEntry.gameName} ${gameEntry.lowestPercentage}%`);
+                break;
+            }
+        }
 
         await delay(500);
     } catch (error) {
