@@ -1,6 +1,8 @@
-# Nextgametoplay
+# NextGameToPlay
 
 A simple node.js script that will tell you what Steam game to play next, based on how many players got the rarest achievement for each game.
+
+It essentially tells you what might be the easiest game in your library to complete 100%.
 
 Example:
 
@@ -27,15 +29,15 @@ Example:
 ## Usage
 
 * Login to Steam using a web browser. 
-* Go to Profile » Games. Make sure the URL points to: https://steamcommunity.com/profiles/ID/games/?tab=all
+* Go to Profile » Games. Make sure the URL points to: https://steamcommunity.com/profiles/{ID}/games/?tab=all , where {ID} is a numeric value representing your Steam ID.
 * Save the webpage (in Chrome right-click on the page -> Save as...)
-* Download the script
+* Download the script: grab `nextgametoplay.js` from the [releases](https://github.com/mihaifm/nextgametoplay/releases/latest)
 * Install [node.js](https://nodejs.org)
 * Open a command line or powershell
 * Type `node nextgametoplay.js Games.htm`, where Games.htm is the web page you saved earlier.
 
 ## Notes
 
-You can save a file containing a list of your games, sorted by the difficulty of the rarest achievement. Just add another parameter to the command
+You can save the output to a file. It will be sorted by the difficulty of the rarest achievement for each game. Just add another parameter to the command
 
     node nextgametoplay.js list_of_games.html output.txt
